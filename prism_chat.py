@@ -20,7 +20,7 @@ def construct_request_json(request, parameters):
 
 win = tk.Tk()
 win.title("Prism Chat Client (Alpha v0.0.1)")
-win.geometry("250x500")
+win.geometry("854x480")
 
 uname = tk.Entry(win)
 uname.place(x=0, y=0, relwidth=1)
