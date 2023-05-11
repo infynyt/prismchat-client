@@ -1,7 +1,9 @@
+from tkinter import simpledialog
 import requests as r
 import tkinter as tk
 import hashlib as h
 import json as j
+import sys
 
 global username
 global password
@@ -21,6 +23,16 @@ def construct_request_json(request, parameters):
 win = tk.Tk()
 win.title("Prism Chat Client (Alpha v0.0.1)")
 win.geometry("250x500")
+win.withdraw()
+global address
+address = simpledialog.askstring(title="Prism Chat", prompt="Enter the server address")
+if not address:
+    win.destroy()
+    sys.exit(0)
+win.deiconify()
+
+global auth_token
+auth_token = None
 
 uname = tk.Entry(win)
 uname.place(x=0, y=0, relwidth=1)
@@ -34,10 +46,12 @@ textinput = tk.Entry(win)
 textinput.place(relx=1, rely=1, relwidth=1, anchor="se")
 textinput.insert(0, "Send a message")
 def login(uname, passw):
-    log = r.post("", json=j.dumps(construct_request_json("login", {"username": uname, "passwordHash": h.sha1(passw)})))
+    log = r.post("", json=j.dumps(construct_request_json("login", {"username": uname, "passwordHash": h.sha1(passw)}))).json()
     rs = log["success"]
     if rs:
         username = uname
         password = passw
+    auth_token = log["token"]
+    
 
 win.mainloop()
